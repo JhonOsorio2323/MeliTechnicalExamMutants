@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.services;
+package com.meli.mutants.rest.services;
 
 import java.io.Serializable;
 import java.util.Arrays;

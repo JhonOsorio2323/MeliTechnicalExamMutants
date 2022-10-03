@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.controllers;
+package com.meli.mutants.rest.controllers;
 
 import java.io.IOException;
 
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.meli.mutans.rest.services.MutantsException;
-import com.meli.mutans.rest.services.MutantsStatsResult;
-import com.meli.mutans.rest.services.MutantsStatsService;
+import com.meli.mutants.rest.services.MutantsException;
+import com.meli.mutants.rest.services.stats.MutantsStatsResult;
+import com.meli.mutants.rest.services.stats.MutantsStatsService;
 
 /**
  * Clase que expone el servicio para las estadisticas de verificacion.

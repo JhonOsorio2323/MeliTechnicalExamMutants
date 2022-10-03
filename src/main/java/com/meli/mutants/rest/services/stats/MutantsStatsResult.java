@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.services;
+package com.meli.mutants.rest.services.stats;
 
 import java.io.Serializable;
 

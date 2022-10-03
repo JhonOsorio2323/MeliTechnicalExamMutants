@@ -1,11 +1,11 @@
-package com.meli.mutans.rest.repository;
+package com.meli.mutants.rest.repository;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Repository;
 
-import com.meli.mutans.rest.services.MutantsException;
+import com.meli.mutants.rest.services.MutantsException;
 
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;

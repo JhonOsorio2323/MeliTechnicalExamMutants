@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.controllers;
+package com.meli.mutants.rest.controllers;
 
 import java.io.IOException;
 
@@ -10,11 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.meli.mutans.rest.services.MutantDna;
-import com.meli.mutans.rest.services.MutantsException;
-import com.meli.mutans.rest.services.MutantsService;
+import com.meli.mutants.rest.services.MutantDna;
+import com.meli.mutants.rest.services.MutantsException;
+import com.meli.mutants.rest.services.MutantsService;
 
 /**
  * Controlador que sirve para exponer el servicio y los métodos para la
@@ -36,10 +37,10 @@ public class MutantsController {
 	 * 
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void mutants(HttpServletResponse response, HttpServletRequest request, @RequestBody MutantDna dnaInformation)
+	public void mutants(HttpServletResponse response, HttpServletRequest request, @RequestBody MutantDna dnaInformation, @RequestParam(required = false, name = "searchMethod") Integer searchMethod)
 			throws IOException {
 		try {
-			processResponse(response, mutantsService.processMutantDnaValidation(dnaInformation));
+			processResponse(response, mutantsService.processMutantDnaValidation(dnaInformation, searchMethod));
 		} catch (MutantsException e) {
 			invalidateRequest(response, e.getMessage());
 		}

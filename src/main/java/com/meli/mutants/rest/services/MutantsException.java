@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.services;
+package com.meli.mutants.rest.services;
 
 /**
  * Excepcion controlada para las excepciones que se pueden presentar en el proceso de verificacion de mutantes.

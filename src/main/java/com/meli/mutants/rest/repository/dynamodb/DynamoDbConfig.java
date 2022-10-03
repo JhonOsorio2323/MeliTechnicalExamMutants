@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.repository.dynamodb;
+package com.meli.mutants.rest.repository.dynamodb;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

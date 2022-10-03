@@ -1,4 +1,4 @@
-package com.meli.mutans.rest.repository;
+package com.meli.mutants.rest.repository;
 
 import java.io.Serializable;
 import java.util.List;

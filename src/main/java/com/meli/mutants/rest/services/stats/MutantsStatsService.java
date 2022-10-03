@@ -1,9 +1,11 @@
-package com.meli.mutans.rest.services;
+package com.meli.mutants.rest.services.stats;
 
 import org.springframework.stereotype.Service;
 
-import com.meli.mutans.rest.repository.MutantDnaStatsTable;
-import com.meli.mutans.rest.repository.MutantsStatsRepository;
+import com.meli.mutants.rest.repository.MutantDnaStatsTable;
+import com.meli.mutants.rest.repository.MutantsStatsRepository;
+import com.meli.mutants.rest.services.MutantDna;
+import com.meli.mutants.rest.services.MutantsException;
 
 /**
  * Servicio para las estadisticas de las validaciones de dna mutante.
