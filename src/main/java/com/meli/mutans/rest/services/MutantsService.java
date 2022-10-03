@@ -1,50 +1,67 @@
 package com.meli.mutans.rest.services;
 
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.meli.mutans.rest.repository.MutantDnaTable;
+import com.meli.mutans.rest.repository.MutantsRepository;
+
+/**
+ * Servicio para exponer metodos con funcionalidad para la validación dna
+ * mutante.
+ * 
+ * @author Jhon Osorio
+ *
+ */
 @Service
 public class MutantsService {
+
+	/** Servicio para las estadisticas de verificación del dna */
+	@Autowired
+	MutantsStatsService mutantsStatsService;
+
+	/**
+	 * Repositorio.
+	 */
+	private final MutantsRepository mutantsRepository;
+
+	/**
+	 * Constructor.
+	 */
+	public MutantsService(MutantsRepository dataRepository) {
+		this.mutantsRepository = dataRepository;
+	}
 
 	/**
 	 * Método para validar si un adn pertenece a un mutante.
 	 * 
-	 * @param informacionAdn - informacion con la cadena adn requerida.
-	 * @return
+	 * @param dnaInformation - informacion con la cadena adn requerida.
 	 * @return true si el adn pertenece a un mutante.
-	 * @throws MutantsException - se lanza cuando se presenta algun error dentro del
-	 *                          procesamiento.
 	 */
-	public boolean isMutant(MutantAdn informacionAdn) throws MutantsException {
+	private boolean isMutant(MutantDna dnaInformation) {
 
-		if (informacionAdn == null || informacionAdn.getDna() == null || informacionAdn.getDna().length == 0) {
-			throw new MutantsException("Adn not informed or type is invalid.");
-		}
-		String[] adnArray = informacionAdn.getDna();
-		int arrayLength = adnArray.length;
-		int nroLetrasConsecutivas = 4;
-		// Para tener cuatro letras consecutivas, el tamaño de array debe ser minimo de
-		// 4.
-		if (arrayLength < nroLetrasConsecutivas) {
-			return false;
-		}
-		for (int i = 0; i < arrayLength; i++) {
-			String row = adnArray[i];
+		String[] dnaArray = dnaInformation.getDna();
+		int arrayLength = dnaArray.length;
+		for (int indexRow = 0; indexRow < arrayLength; indexRow++) {
+			String row = dnaArray[indexRow];
 			// Se valida horizontalmente si se tiene una cadena mutante.
 			if (containsDnaMutant(row)) {
 				return true;
 			}
 
-			// se valida por columna
-			for (int j = 0; j < row.length() - 3; j++) {
-				String caracterColumna = row.charAt(j) + "";
-				String filaSiguiente1 = getRow(i + 1, adnArray);
-				String filaSiguiente2 = getRow(i + 2, adnArray);
-				String filaSiguiente3 = getRow(i + 3, adnArray);
+			// se valida por columna y diagonal
+			for (int indexColumn = 0; indexColumn < row.length(); indexColumn++) {
+				String columnCharacter = row.charAt(indexColumn) + "";
+				String nextRow1 = getRow(indexRow + 1, dnaArray);
+				String nextRow2 = getRow(indexRow + 2, dnaArray);
+				String nextRow3 = getRow(indexRow + 3, dnaArray);
 
-				if (containsDnaMutant(caracterColumna + getColumn(j, filaSiguiente1) + getColumn(j, filaSiguiente2)
-						+ getColumn(j, filaSiguiente3))
-						|| containsDnaMutant(caracterColumna + getColumn(j + 1, filaSiguiente1)
-								+ getColumn(j + 2, filaSiguiente2) + getColumn(j + 3, filaSiguiente3))) {
+				if (containsDnaMutant(columnCharacter + getColumn(indexColumn, nextRow1)
+						+ getColumn(indexColumn, nextRow2) + getColumn(indexColumn, nextRow3))
+						|| containsDnaMutant(columnCharacter + getColumn(indexColumn + 1, nextRow1)
+								+ getColumn(indexColumn + 2, nextRow2) + getColumn(indexColumn + 3, nextRow3))) {
 					return true;
 				}
 
@@ -54,7 +71,40 @@ public class MutantsService {
 	}
 
 	/**
-	 * Obtiene la fila
+	 * Proceso para validar si un adn pertenece a un mutante.
+	 * 
+	 * @param dnaInformation - informacion con la cadena adn requerida.
+	 * @return true si el adn pertenece a un mutante.
+	 * @throws MutantsException - se lanza cuando se presenta algun error dentro del
+	 *                          procesamiento.
+	 */
+	public boolean processMutantDnaValidation(MutantDna dnaInformation) throws MutantsException {
+
+		if (dnaInformation == null || dnaInformation.getDna() == null || dnaInformation.getDna().length == 0) {
+			throw new MutantsException("Dna not informed or type is invalid.");
+		}
+
+		boolean dnaMutant = false;
+		Integer dnaKey = dnaInformation.getKey();
+		MutantDnaTable dnaBd = mutantsRepository.findDnaById(dnaKey);
+		if (dnaBd == null) {
+			dnaMutant = isMutant(dnaInformation);
+			dnaBd = new MutantDnaTable();
+			dnaBd.setKey(dnaKey);
+			dnaBd.setDna(Arrays.asList(dnaInformation.getDna()));
+			dnaBd.setMutant(dnaMutant);
+			mutantsRepository.createDna(dnaBd);
+			mutantsStatsService.processStats(dnaMutant, dnaInformation);
+		} else {
+			dnaMutant = dnaBd.getMutant();
+		}
+
+		return dnaMutant;
+
+	}
+
+	/**
+	 * Obtiene la fila del arreglo.
 	 */
 	private String getRow(int rowNumber, String[] array) {
 		if (rowNumber > 0 && array != null && rowNumber < array.length) {
@@ -74,9 +124,7 @@ public class MutantsService {
 	}
 
 	/**
-	 * 
-	 * @param dna
-	 * @return
+	 * Indicia si una cadena contiene dna mutante.
 	 */
 	private boolean containsDnaMutant(String dna) {
 		if (dna == null) {
@@ -84,11 +132,11 @@ public class MutantsService {
 		}
 		// Descomentar esta linea si no importa si la cadena de adn viene en minusculas.
 		// dna = dna.toUpperCase();
-		String adnT = "TTTT";
-		String adnG = "GGGG";
-		String adnC = "CCCC";
-		String adnA = "AAAA";
-		return dna.contains(adnT) || dna.contains(adnG) || dna.contains(adnC) || dna.contains(adnA);
+		String dnaT = "TTTT";
+		String dnaG = "GGGG";
+		String dnaC = "CCCC";
+		String dnaA = "AAAA";
+		return dna.contains(dnaT) || dna.contains(dnaG) || dna.contains(dnaC) || dna.contains(dnaA);
 	}
 
 }

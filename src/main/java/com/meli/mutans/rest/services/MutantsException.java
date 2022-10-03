@@ -14,7 +14,7 @@ public class MutantsException extends Exception {
 	
 	
 	/**
-	 * Cosntructor.
+	 * Constructor.
 	 * @param message - mensaje relacionado.
 	 */
 	public MutantsException(String message){

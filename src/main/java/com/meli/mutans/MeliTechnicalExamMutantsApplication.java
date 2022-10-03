@@ -16,6 +16,8 @@ public class MeliTechnicalExamMutantsApplication {
 	 * @param args - argumentos de la aplicación.
 	 */
 	public static void main(String[] args) {
+		//Se deshabilitan las tareas de desarrollo para que no se presenten errores con el classloader de dynamodb
+		System.setProperty("spring.devtools.restart.enabled", "false");
 		// Se inicializa la ejecucion mediante spring boot.
 		SpringApplication.run(MeliTechnicalExamMutantsApplication.class, args);
 	}

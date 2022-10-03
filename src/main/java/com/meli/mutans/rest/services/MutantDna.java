@@ -1,6 +1,7 @@
 package com.meli.mutans.rest.services;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MutantAdn implements Serializable {
+public class MutantDna implements Serializable {
 
 	/**
 	 * Serial
@@ -19,12 +20,13 @@ public class MutantAdn implements Serializable {
 	private static final long serialVersionUID = 5075504446310933462L;
 
 	/**
-	 * Adn
+	 * Dna
 	 */
 	protected String[] dna;
 
 	/**
 	 * Get
+	 * 
 	 * @return
 	 */
 	public String[] getDna() {
@@ -33,10 +35,24 @@ public class MutantAdn implements Serializable {
 
 	/**
 	 * Set
+	 * 
 	 * @param dna
 	 */
 	public void setDna(String[] dna) {
 		this.dna = dna;
+	}
+
+	/**
+	 * Get
+	 * 
+	 * @return
+	 */
+	public Integer getKey() {
+		Integer key = null;
+		if (this.dna != null) {
+			key = Arrays.asList(this.dna).hashCode();
+		}
+		return key;
 	}
 
 }

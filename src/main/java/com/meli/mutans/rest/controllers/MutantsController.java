@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.meli.mutans.rest.services.MutantAdn;
+import com.meli.mutans.rest.services.MutantDna;
 import com.meli.mutans.rest.services.MutantsException;
 import com.meli.mutans.rest.services.MutantsService;
-import com.meli.mutans.rest.services.MutantsStatsService;
 
 /**
  * Controlador que sirve para exponer el servicio y los métodos para la
@@ -25,11 +24,9 @@ import com.meli.mutans.rest.services.MutantsStatsService;
 @RequestMapping("/mutant")
 public class MutantsController {
 
+	/** Servicio para la verificación del dna */
 	@Autowired
 	MutantsService mutantsService;
-
-	@Autowired
-	MutantsStatsService mutantsStatsService;
 
 	/**
 	 * método que valida si el adn es de un humano o de un mutante. Se mapea como
@@ -39,25 +36,22 @@ public class MutantsController {
 	 * 
 	 */
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void mutants(HttpServletResponse response, HttpServletRequest request,@RequestBody MutantAdn adnInformation)
+	public void mutants(HttpServletResponse response, HttpServletRequest request, @RequestBody MutantDna dnaInformation)
 			throws IOException {
-
 		try {
-			boolean adnMutant = mutantsService.isMutant(adnInformation);
-			processResponse(response, adnMutant);
-			mutantsStatsService.processStats(adnMutant, adnInformation);
+			processResponse(response, mutantsService.processMutantDnaValidation(dnaInformation));
 		} catch (MutantsException e) {
-			invalidateRequest(response, e);
+			invalidateRequest(response, e.getMessage());
 		}
 	}
 
 	/**
 	 * invalida la petición cuando no es autorizada por error en datos.
 	 * 
-	 * @param exception
+	 * @param exception - excepcion generada.
 	 */
-	private void invalidateRequest(HttpServletResponse response, MutantsException exception) throws IOException {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, exception.getMessage());
+	private void invalidateRequest(HttpServletResponse response, String message) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
 	}
 
 	/**
