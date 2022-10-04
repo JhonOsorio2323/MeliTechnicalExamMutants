@@ -73,7 +73,7 @@ public class MutantsStatsRepository {
 	/**
 	 * Obtiene el dna de bd si existe.
 	 */
-	private MutantDnaStatsTable findDnaById() throws MutantsException {
+	public MutantDnaStatsTable findDnaById() throws MutantsException {
 		try {
 			return getDnaByID(keyTable).get();
 		} catch (InterruptedException | ExecutionException e) {

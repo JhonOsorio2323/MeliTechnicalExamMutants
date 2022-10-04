@@ -238,7 +238,7 @@ public class MutantsService {
 	 * Obtiene la fila del arreglo.
 	 */
 	private String getRow(int rowNumber, String[] array) {
-		if (rowNumber > 0 && array != null && rowNumber < array.length) {
+		if (rowNumber >= 0 && array != null && rowNumber < array.length) {
 			return array[rowNumber];
 		}
 		return "";
@@ -248,7 +248,7 @@ public class MutantsService {
 	 * Obtiene la fila
 	 */
 	private String getColumn(int columnNumber, String row) {
-		if (columnNumber > 0 && row != null && columnNumber < row.length()) {
+		if (columnNumber >= 0 && row != null && columnNumber < row.length()) {
 			return "" + row.charAt(columnNumber);
 		}
 		return "";

@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public enum MutansSearchMethod {
 
-	DEFAULT("Loop Search", 1), RECURSIVE("Recursive Search", 2), COMBINED("Loop Recursive Search", 3);
+	DEFAULT(1), RECURSIVE(2), COMBINED(3);
 
 	/** Mapa que contiene los metodos. */
 	private static Map<Integer, MutansSearchMethod> mapMethods = new HashMap<>();
@@ -24,11 +24,6 @@ public enum MutansSearchMethod {
 	}
 
 	/**
-	 * Nombre del método
-	 */
-	private String name;
-
-	/**
 	 * Código que lo identifica.
 	 */
 	private int code;
@@ -36,17 +31,10 @@ public enum MutansSearchMethod {
 	/**
 	 * Constructor
 	 */
-	private MutansSearchMethod(String name, int code) {
-		this.name = name;
+	private MutansSearchMethod(int code) {
 		this.code = code;
 	}
 
-	/**
-	 * get
-	 */
-	public String getName() {
-		return name;
-	}
 
 	/**
 	 * get
