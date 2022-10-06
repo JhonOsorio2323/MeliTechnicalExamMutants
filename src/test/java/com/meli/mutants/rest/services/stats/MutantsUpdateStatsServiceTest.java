@@ -142,7 +142,7 @@ public class MutantsUpdateStatsServiceTest {
 			Mockito.verify(mutantsStatsRepository, Mockito.times(1)).findCreateDna();
 			Mockito.verify(mutantsStatsRepository, Mockito.times(1)).updateDna(statsTable);
 
-			assertEquals(HttpServletResponse.SC_FORBIDDEN, response.getStatus());
+			assertEquals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 			assertEquals(humansCount + 1, statsTable.getNumberDnaHumans());
 			assertEquals(mutantsCount, statsTable.getNumberDnaMutants());
 		} finally {

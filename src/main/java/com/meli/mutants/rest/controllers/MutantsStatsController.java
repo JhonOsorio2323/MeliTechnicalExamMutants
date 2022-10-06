@@ -42,7 +42,7 @@ public class MutantsStatsController {
 	 * @param exception - excepcion generada.
 	 */
 	private void invalidateRequest(HttpServletResponse response, String message) throws IOException {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
+		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
 	}
 
 }

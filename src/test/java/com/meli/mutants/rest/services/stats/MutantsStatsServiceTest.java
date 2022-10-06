@@ -92,7 +92,7 @@ public class MutantsStatsServiceTest {
 			Mockito.when(mutantsStatsRepository.findCreateDna()).thenThrow(new MutantsException(errorMessage));
 			controller.mutantsStats(response);
 			Mockito.verify(mutantsStatsRepository, Mockito.times(1)).findCreateDna();
-			assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
+			assertEquals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response.getStatus());
 			assertEquals(errorMessage, ((MockHttpServletResponse) response).getErrorMessage());
 		} finally {
 			ReflectionTestUtils.setField(initialStatsService, nameVariableRepository, initialStatsRepository);
